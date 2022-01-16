@@ -1,71 +1,63 @@
-﻿using Demos.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using Demos.Linq2DB.DB;
+﻿namespace Demos.Linq2DB;
 
-namespace Demos.Linq2DB
+class LinqToDBDemos
 {
-    class LinqToDBDemos
+    public void Execute1()
     {
-        public LinqToDBDemos()
-        {
-            PersonFaker.BuildDB();
-        }
+        Console.WriteLine("--- LinqToDBDemos.Execute1 ---");
 
-        public void Execute1()
-        {
-            var context = new DemoContext();
+        using var context = new DemoContext();
 
-            // Linq Abfrage auf eine Liste von Objekten
-            var result = from q in context.Persons
-                         where q.ID < 5
-                         select new
-                         {
-                             ID = q.ID,
-                             Name = $"{q.FirstName} {q.LastName}",
-                             BirthDay = q.BirthDay
-                         };
+        // Linq Abfrage auf eine Liste von Objekten
+        var result = from q in context.Persons
+                     where q.ID < 5
+                     select new
+                     {
+                         q.ID,
+                         Name = $"{q.FirstName} {q.LastName}",
+                         q.BirthDay
+                     };
 
-            Console.WriteLine(ObjectDumper.Dump(result.ToList()));
-        }
+        Console.WriteLine(ObjectDumper.Dump(result.ToList()));
+    }
 
-        public void Execute2()
-        {
-            var context = new DemoContext();
+    public void Execute2()
+    {
+        Console.WriteLine("--- LinqToDBDemos.Execute2 ---");
 
-            // Linq Ausdruck (Lambda Style) auf eine Liste von Objekten
-            var result = context.Persons
-                           .Where(q => q.ID < 5)
-                           .Select(q => new
-                           {
-                               ID = q.ID,
-                               Name = $"{q.FirstName} {q.LastName}",
-                               BirthDay = q.BirthDay
-                           });
+        using var context = new DemoContext();
 
-            Console.WriteLine(ObjectDumper.Dump(result.ToList()));
-        }
+        // Linq Ausdruck (Lambda Style) auf eine Liste von Objekten
+        var result = context.Persons
+                       .Where(q => q.ID < 5)
+                       .Select(q => new
+                       {
+                           q.ID,
+                           Name = $"{q.FirstName} {q.LastName}",
+                           q.BirthDay
+                       });
 
-        public void Execute3()
-        {
-            var context = new DemoContext();
+        Console.WriteLine(ObjectDumper.Dump(result.ToList()));
+    }
 
-            var result = context.Persons
-                            .Where(q => q.ID < 5)
-                            .Select(q => new
-                            {
-                                ID = q.ID,
-                                Name = $"{q.FirstName} {q.LastName}",
-                                CurrentSteet = q.Addresses
-                                                .OrderByDescending(s => s.ID)
-                                                .Select(s => $"{s.StreetName} {s.StreetNo}")
-                                                .FirstOrDefault()
-                            });
+    public void Execute3()
+    {
+        Console.WriteLine("--- LinqToDBDemos.Execute3 ---");
 
-            Console.WriteLine(ObjectDumper.Dump(result.ToList()));
-        }
+        using var context = new DemoContext();
 
+        var result = context.Persons
+                        .Where(q => q.ID < 5)
+                        .Select(q => new
+                        {
+                            q.ID,
+                            Name = $"{q.FirstName} {q.LastName}",
+                            CurrentSteet = q.Addresses
+                                            .OrderByDescending(s => s.ID)
+                                            .Select(s => $"{s.StreetName} {s.StreetNo}")
+                                            .FirstOrDefault()
+                        });
+
+        Console.WriteLine(ObjectDumper.Dump(result.ToList()));
     }
 }
