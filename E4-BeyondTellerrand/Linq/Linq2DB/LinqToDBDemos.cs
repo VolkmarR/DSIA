@@ -9,14 +9,9 @@ namespace Demos.Linq2DB
 {
     class LinqToDBDemos
     {
-        public LinqToDBDemos()
-        {
-            PersonFaker.BuildDB();
-        }
-
         public void Execute1()
         {
-            var context = new DemoContext();
+            using var context = new DemoContext();
 
             // Linq Abfrage auf eine Liste von Objekten
             var result = from q in context.Persons
@@ -33,7 +28,7 @@ namespace Demos.Linq2DB
 
         public void Execute2()
         {
-            var context = new DemoContext();
+            using var context = new DemoContext();
 
             // Linq Ausdruck (Lambda Style) auf eine Liste von Objekten
             var result = context.Persons
@@ -50,7 +45,7 @@ namespace Demos.Linq2DB
 
         public void Execute3()
         {
-            var context = new DemoContext();
+            using var context = new DemoContext();
 
             var result = context.Persons
                             .Where(q => q.ID < 5)

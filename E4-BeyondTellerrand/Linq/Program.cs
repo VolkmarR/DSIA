@@ -25,6 +25,7 @@ namespace Demos
             // new LinqToObjectsDemos().Execute2();
 
             // DB Demos
+            // PersonFaker.BuildDB();
             // new LinqToDBDemos().Execute1();
             // new LinqToDBDemos().Execute2();
             // new LinqToDBDemos().Execute3();

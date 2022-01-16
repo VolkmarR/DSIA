@@ -52,8 +52,8 @@ namespace Demos.Helpers
         public static void BuildDB(int count = 100)
         {
             var data = Build(count);
-            File.Delete("DummyDB.db");
-            var context = new DemoContext(false);
+            using var context = new DemoContext(false);
+            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
             foreach (var item in data)
                 context.Persons.Add(new PersonDB { FirstName = item.FirstName, LastName = item.LastName, BirthDay = item.BirthDay, Addresses = item.Addresses?.Select(q => new AddressDB { StreetName = q.StreetName, StreetNo = q.StreetNo, City = q.City, ZipCode = q.ZipCode }).ToList() });
